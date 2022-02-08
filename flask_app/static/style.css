@@ -1,0 +1,15 @@
+.forms{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.container{
+    display: flex;
+    justify-content: space-around;
+}
+h1{
+    text-align: center;
+}
+table{
+    border: 5px solid black;
+}

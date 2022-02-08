@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Friendships</h1>
+    <div class="container">
+        <table>
+            <thead>
+                <th>USER</th>
+                <th>Friend</th>
+            </thead>
+            <tbody>
+            {% for user in all_users %}
+                {% for friend in user.friends %}
+                    <tr>
+                        <td>{{user.first_name}} {{user.last_name}}</td>
+                        <td>{{ friend.first_name }} {{ friend.last_name }}</td>
+                    </tr>
+                {%endfor%}
+            {%endfor%}
+            </tbody>
+        </table>
+        <div class="forms">
+            <form action="new_user" method="post">
+                <label for="fname">First Name:</label>
+                <input type="text" name="fname" id="fname">
+                <label for="lname">Last Name:</label>
+                <input type="text" name="lname" id="lname">
+                <input type="submit" value="Add User">
+            </form>
+            <form action="create_friendship" method="post">
+                <label for="user">User:</label>
+                <select name="user" id="user">
+                    {% for person in all_people %}
+                        <option value="{{person.id}}">{{person.first_name}} {{person.last_name}}</option>
+                    {% endfor %}
+                </select>
+                <label for="friend">Friend</label>
+                <select name="friend" id="friend">
+                    {% for person in all_people %}
+                        <option value="{{person.id}}">{{person.first_name}} {{person.last_name}}</option>
+                    {%endfor%}
+                </select>
+                <input type="submit" value="Add Friendship">
+                {% with messages = get_flashed_messages() %}     <!-- declare a variable called messages -->
+                    {% if messages %}                            <!-- check if there are any messages -->
+                        {% for message in messages %}            <!-- loop through the messages -->
+                            <p>{{message}}</p>                   <!-- display each message in a paragraph tag -->
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </form>
+        </div>
+    </div>
+</body>
+</html>
