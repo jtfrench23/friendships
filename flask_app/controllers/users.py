@@ -13,6 +13,8 @@ def index():
 
 @app.route("/new_user", methods={"POST"})
 def new_user():
+    if not user.User.validate_user(request.form):
+        return redirect('/')
     user.User.save(request.form)
     return redirect("/")
 @app.route("/create_friendship", methods=["POST"])

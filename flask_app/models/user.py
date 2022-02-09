@@ -71,13 +71,21 @@ class User:
             flash("User cannot be friends with themselves")
         for user in friendships:
             if user.id == int(data["user"]):
-                print("yes!!!!!!")
                 for friend in user.friends:
                     if friend.id==int(data["friend"]):
                         flash("this friendship already exists")
                         is_valid=False        
         return is_valid
-
+    @staticmethod
+    def validate_user ( data ):
+        is_valid=True
+        if len(data['fname'])<2:
+            is_valid=False
+            flash("first name must be at least 2 characters")
+        if len(data["lname"])<2:
+            is_valid=False
+            flash("last name must be at least 2 characters")
+        return is_valid
         # @classmethod
         # def update(cls, data):
         #     query = "UPDATE users SET first_name=%(fname)s, last_name=%(lname)s WHERE id = %(id)s;"
