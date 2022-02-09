@@ -10,6 +10,20 @@ class User:
         self.created_at=data['created_at']
         self.updated_at=data['updated_at']
         self.friends=[]
+
+# CREATE
+    @classmethod
+    def save(cls, data ):
+        query = "INSERT INTO users ( first_name , last_name , created_at, updated_at ) VALUES ( %(fname)s , %(lname)s , NOW() , NOW() );"
+        return connectToMySQL('friendships').query_db( query, data )
+
+    @classmethod
+    def new_friend(cls, data ):
+        query = "INSERT INTO friendships (user_id, friend_id, created_at, updated_at) VALUES ( %(user)s , %(friend)s, NOW(), NOW() );"
+        return connectToMySQL('friendships').query_db( query, data )
+
+
+#READ
     @classmethod
     def get_all(cls):
         query= "SELECT * FROM users;"
@@ -18,22 +32,10 @@ class User:
         for user in result:
             users.append(cls(user))
         return users
+
     @classmethod
     def get_one(cls, data):
         query= "SELECT * FROM users where id=%(id)s;"
-        return connectToMySQL('friendships').query_db(query, data)
-
-    @classmethod
-    def save(cls, data ):
-        query = "INSERT INTO users ( first_name , last_name , created_at, updated_at ) VALUES ( %(fname)s , %(lname)s , NOW() , NOW() );"
-        return connectToMySQL('friendships').query_db( query, data )
-    @classmethod
-    def new_friend(cls, data ):
-        query = "INSERT INTO friendships (user_id, friend_id, created_at, updated_at) VALUES ( %(user)s , %(friend)s, NOW(), NOW() );"
-        return connectToMySQL('friendships').query_db( query, data )
-    @classmethod
-    def delete(cls, data):
-        query = "DELETE FROM users WHERE id = (%(id)s);"
         return connectToMySQL('friendships').query_db(query, data)
     @classmethod
     def get_all_friendships(cls):
@@ -61,6 +63,30 @@ class User:
             user.friends.append(User(friend_data))
             all_friendships.append(user)
         return all_friendships
+
+#Update
+
+# @classmethod
+        # def update(cls, data):
+        #     query = "UPDATE users SET first_name=%(fname)s, last_name=%(lname)s WHERE id = %(id)s;"
+        #     return connectToMySQL('friendships').query_db( query, data )
+
+
+
+#DELETE
+    @classmethod
+    def delete(cls, data):
+        query = "DELETE FROM users WHERE id = (%(id)s);"
+        return connectToMySQL('friendships').query_db(query, data)
+
+
+
+
+
+
+
+#static
+
     @staticmethod
     def validate_friendship ( data ):
         is_valid = True
@@ -86,8 +112,5 @@ class User:
             is_valid=False
             flash("last name must be at least 2 characters")
         return is_valid
-        # @classmethod
-        # def update(cls, data):
-        #     query = "UPDATE users SET first_name=%(fname)s, last_name=%(lname)s WHERE id = %(id)s;"
-        #     return connectToMySQL('friendships').query_db( query, data )
+        
 
