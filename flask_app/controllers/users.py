@@ -4,13 +4,7 @@ from flask import render_template, redirect, request, session
 #import model that you need below
 from flask_app.models import user
 
-
-@app.route("/")
-def index():
-    all_users= user.User.get_all_friendships()
-    all_people= user.User.get_all()
-    return render_template("index.html", all_users=all_users, all_people=all_people)
-
+# Create
 @app.route("/new_user", methods={"POST"})
 def new_user():
     if not user.User.validate_user(request.form):
@@ -24,3 +18,18 @@ def new_friends():
         return redirect('/')
     user.User.new_friend(request.form)
     return redirect("/")
+
+#READ
+@app.route("/")
+def index():
+    all_users= user.User.get_all_friendships()
+    all_people= user.User.get_all()
+    return render_template("index.html", all_users=all_users, all_people=all_people)
+
+#UPDATE
+
+#DELETE
+
+
+
+
