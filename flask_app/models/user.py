@@ -37,6 +37,7 @@ class User:
     def get_one(cls, data):
         query= "SELECT * FROM users where id=%(id)s;"
         return connectToMySQL('friendships').query_db(query, data)
+        
     @classmethod
     def get_all_friendships(cls):
         query = """
@@ -52,7 +53,7 @@ class User:
         all_friendships=[]
         for row in result:
             user=cls(row)    
-            print(["users.id"])
+            print(user.id)
             friend_data = {
                 "id" : row["friend.id"],
                 "first_name" : row["friend.first_name"],
@@ -60,7 +61,7 @@ class User:
                 "created_at": row["friend.created_at"],
                 "updated_at": row["friend.updated_at"]
             }
-            user.friends.append(User(friend_data))
+            user.friends.append(cls(friend_data))
             all_friendships.append(user)
         return all_friendships
 
@@ -91,14 +92,14 @@ class User:
     def validate_friendship ( data ):
         is_valid = True
         friendships=User.get_all_friendships()
-        print(friendships[0].id)
+        print(friendships[0])
         if data["user"]==data["friend"]:
             is_valid=False
             flash("User cannot be friends with themselves")
         for user in friendships:
-            if user.id == int(data["user"]):
-                for friend in user.friends:
-                    if friend.id==int(data["friend"]):
+            for friend in user.friends:
+                print(friend.id, "$$$$$$$$$$$", data["friend"])
+                if friend.id == int(data["friend"]):
                         flash("this friendship already exists")
                         is_valid=False        
         return is_valid
